@@ -1,44 +1,45 @@
-FROM alpine:3.3
+FROM alpine:3.5
 
-RUN adduser -S znc && addgroup -S znc
+ENV ZNC_VERSION 1.6.4
 
-RUN mkdir -p /home/znc/src /home/znc/build
-WORKDIR /home/znc/build
-ADD . /home/znc/src
-
-ARG CONFIGUREFLAGS="--enable-perl --enable-python 3.5"
-ARG CLEANCMD="apk del build-dependencies && rm -Rf /home/znc/build /home/znc/src"
+ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python"
+ARG CLEANCMD="apk del build-dependencies && rm -Rf /znc-src"
 ARG MAKEFLAGS=""
 
-RUN apk add --no-cache --virtual runtime-dependencies \
+RUN set -x \
+    && adduser -S znc \
+    && addgroup -S znc \
+    && apk add --no-cache --virtual runtime-dependencies \
         icu \
         openssl \
-        boost \
         python3 \
         perl \
-        cyrus-sasl
-
-RUN apk add --no-cache --virtual build-dependencies \
+        cyrus-sasl \
+    && apk add --no-cache --virtual build-dependencies \
         build-base \
-        cmake \
-        git \
         icu-dev \
         openssl-dev \
         cyrus-sasl-dev \
+        gnupg \
         perl-dev \
         python3-dev \
-        swig \
-        gettext-dev \
-        boost-dev \
-    && /home/znc/src/configure.sh $CONFIGUREFLAGS \
+    && mkdir /znc-src && cd /znc-src \
+    && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" \
+    && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --keyserver pool.sks-keyservers.net --recv-keys D5823CACB477191CAC0075555AE420CC0209989E \
+    && gpg --batch --verify znc-"${ZNC_VERSION}.tar.gz.sig" znc-"${ZNC_VERSION}.tar.gz" \
+    && rm -R "$GNUPGHOME" \
+    && tar -zxf znc-"${ZNC_VERSION}.tar.gz" \
+    && mkdir build && cd build \
+    && ../znc-"${ZNC_VERSION}"/configure ${CONFIGUREFLAGS} \
     && make $MAKEFLAGS \
     && make install \
     && sh -c "$CLEANCMD"
 
 USER znc
-WORKDIR /home/znc
-VOLUME /home/znc/data
+VOLUME /znc-data
 
 EXPOSE 6667
 
-ENTRYPOINT ["/usr/local/bin/znc", "-f", "-d", "/home/znc/data"]
+ENTRYPOINT ["/opt/znc/bin/znc", "-f", "-d", "/znc-data"]
