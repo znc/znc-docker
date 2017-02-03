@@ -2,6 +2,9 @@ FROM alpine:3.5
 
 ENV ZNC_VERSION 1.6.4
 
+# modperl and modpython are built, but won't be loadable.
+# :extmodules image installs perl and python3 again, making these modules loadable.
+
 ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python"
 ARG CLEANCMD="apk del build-dependencies && rm -Rf /znc-src"
 ARG MAKEFLAGS=""
@@ -12,9 +15,8 @@ RUN set -x \
     && apk add --no-cache --virtual runtime-dependencies \
         icu \
         openssl \
-        python3 \
-        perl \
         cyrus-sasl \
+        ca-certificates \
     && apk add --no-cache --virtual build-dependencies \
         build-base \
         icu-dev \
