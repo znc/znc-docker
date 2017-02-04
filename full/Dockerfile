@@ -7,6 +7,4 @@ RUN set -x \
         openssl-dev \
         perl \
         python3
-COPY znc-entrypoint.sh /
-
-ENTRYPOINT ["/znc-entrypoint.sh"]
+COPY znc-build-modules.sh /
