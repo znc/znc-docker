@@ -31,7 +31,7 @@ RUN set -x \
     && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" \
     && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver pool.sks-keyservers.net --recv-keys D5823CACB477191CAC0075555AE420CC0209989E \
+    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys D5823CACB477191CAC0075555AE420CC0209989E \
     && gpg --batch --verify znc-"${ZNC_VERSION}.tar.gz.sig" znc-"${ZNC_VERSION}.tar.gz" \
     && rm -R "$GNUPGHOME" \
     && tar -zxf znc-"${ZNC_VERSION}.tar.gz" \
