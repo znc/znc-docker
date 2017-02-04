@@ -1,6 +1,7 @@
 FROM alpine:3.5
 
 ENV ZNC_VERSION 1.6.4
+ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 
 # modperl and modpython are built, but won't be loadable.
 # :extmodules image installs perl and python3 again, making these modules loadable.
@@ -31,7 +32,7 @@ RUN set -x \
     && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" \
     && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys D5823CACB477191CAC0075555AE420CC0209989E \
+    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "${GPG_KEY}" \
     && gpg --batch --verify znc-"${ZNC_VERSION}.tar.gz.sig" znc-"${ZNC_VERSION}.tar.gz" \
     && rm -R "$GNUPGHOME" \
     && tar -zxf znc-"${ZNC_VERSION}.tar.gz" \
