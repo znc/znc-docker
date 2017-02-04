@@ -2,7 +2,7 @@
 
 # Build modules from source.
 if [ -d "${DATADIR}/modules" ]; then
-    cd "${DATADIR}/modules" || exit 1
+    cd "${DATADIR}/modules" || exit 11
 
     # Find module sources.
     modules=$(find . -name "*.cpp")
@@ -10,7 +10,7 @@ if [ -d "${DATADIR}/modules" ]; then
     if [ -n "$modules" ]; then
         # Build modules.
         echo "Building modules $modules..."
-        /opt/znc/bin/znc-buildmod $modules || exit 1
+        /opt/znc/bin/znc-buildmod $modules || exit 12
     fi
 fi
 

@@ -14,6 +14,7 @@ RUN set -x \
     && adduser -S znc \
     && addgroup -S znc \
     && apk add --no-cache --virtual runtime-dependencies \
+        tini \
         icu \
         openssl \
         cyrus-sasl \
@@ -41,11 +42,11 @@ RUN set -x \
     && apk del build-dependencies \
     && cd / && rm -Rf /znc-src
 
-COPY znc-entrypoint.sh /
+COPY docker-entrypoint.sh /
 
 USER znc
 VOLUME /znc-data
 
 EXPOSE 6667
 
-ENTRYPOINT ["/znc-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
