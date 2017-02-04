@@ -1,5 +1,6 @@
 FROM znc:small
 
+# znc:small removed them. Install them again.
 RUN set -x \
     && apk add --no-cache \
         build-base \
