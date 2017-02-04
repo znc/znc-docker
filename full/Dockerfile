@@ -1,4 +1,4 @@
-FROM znc:stdonly
+FROM znc:small
 
 RUN set -x \
     && apk add --no-cache \
