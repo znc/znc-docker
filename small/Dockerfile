@@ -6,7 +6,6 @@ ENV ZNC_VERSION 1.6.4
 # :extmodules image installs perl and python3 again, making these modules loadable.
 
 ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python"
-ARG CLEANCMD="apk del build-dependencies && rm -Rf /znc-src"
 ARG MAKEFLAGS=""
 
 RUN set -x \
@@ -37,7 +36,8 @@ RUN set -x \
     && ../znc-"${ZNC_VERSION}"/configure ${CONFIGUREFLAGS} \
     && make $MAKEFLAGS \
     && make install \
-    && sh -c "$CLEANCMD"
+    && apk del build-dependencies \
+    && cd / && rm -Rf /znc-src
 
 USER znc
 VOLUME /znc-data
