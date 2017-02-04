@@ -5,7 +5,9 @@ ENV ZNC_VERSION 1.6.4
 # modperl and modpython are built, but won't be loadable.
 # :extmodules image installs perl and python3 again, making these modules loadable.
 
-ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python"
+# musl silently doesn't support AI_ADDRCONFIG yet, and ZNC doesn't support Happy Eyeballs yet.
+# Together they cause very slow connection
+ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python --disable-ipv6"
 ARG MAKEFLAGS=""
 
 RUN set -x \
