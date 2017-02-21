@@ -1,47 +1,49 @@
 FROM alpine:3.5
 
-ENV ZNC_VERSION 1.6.4
 ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 
 # modperl and modpython are built, but won't be loadable.
-# :extmodules image installs perl and python3 again, making these modules loadable.
+# :full image installs perl and python3 again, making these modules loadable.
 
 # musl silently doesn't support AI_ADDRCONFIG yet, and ZNC doesn't support Happy Eyeballs yet.
-# Together they cause very slow connection.
+# Together they cause very slow connection. So for now IPv6 is disabled here.
 ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python --disable-ipv6"
 ARG MAKEFLAGS=""
+
+ENV ZNC_VERSION 1.6.4
 
 RUN set -x \
     && adduser -S znc \
     && addgroup -S znc \
     && apk add --no-cache --virtual runtime-dependencies \
-        tini \
+        ca-certificates \
+        cyrus-sasl \
         icu \
         openssl \
-        cyrus-sasl \
-        ca-certificates \
+        tini \
     && apk add --no-cache --virtual build-dependencies \
         build-base \
-        icu-dev \
-        openssl-dev \
+        curl \
         cyrus-sasl-dev \
         gnupg \
+        icu-dev \
+        openssl-dev \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
-    && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" \
-    && wget "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" \
+    && curl -fsSL "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
+    && curl -fsSL "http://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "${GPG_KEY}" \
-    && gpg --batch --verify znc-"${ZNC_VERSION}.tar.gz.sig" znc-"${ZNC_VERSION}.tar.gz" \
-    && rm -R "$GNUPGHOME" \
-    && tar -zxf znc-"${ZNC_VERSION}.tar.gz" \
+    && gpg --batch --verify znc.tgz.sig znc.tgz \
+    && rm -rf "$GNUPGHOME" \
+    && tar -zxf znc.tgz --strip-components=1 \
     && mkdir build && cd build \
-    && ../znc-"${ZNC_VERSION}"/configure ${CONFIGUREFLAGS} \
+    && ../configure ${CONFIGUREFLAGS} \
     && make $MAKEFLAGS \
     && make install \
     && apk del build-dependencies \
-    && cd / && rm -Rf /znc-src
+    && cd / && rm -rf /znc-src
 
 COPY docker-entrypoint.sh /
 
