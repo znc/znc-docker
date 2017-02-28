@@ -50,6 +50,4 @@ COPY docker-entrypoint.sh /
 USER znc
 VOLUME /znc-data
 
-EXPOSE 6667
-
 ENTRYPOINT ["/docker-entrypoint.sh"]
