@@ -1,6 +1,6 @@
-FROM znc:small
+FROM znc:slim
 
-# znc:small removed them. Install them again.
+# znc:slim removed them. Install them again.
 RUN set -x \
     && apk add --no-cache \
         build-base \
