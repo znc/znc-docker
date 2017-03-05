@@ -19,7 +19,6 @@ RUN set -x \
         ca-certificates \
         cyrus-sasl \
         icu \
-        openssl \
         sudo \
         tini \
     && apk add --no-cache --virtual build-dependencies \
@@ -28,7 +27,7 @@ RUN set -x \
         cyrus-sasl-dev \
         gnupg \
         icu-dev \
-        openssl-dev \
+        libressl-dev \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
