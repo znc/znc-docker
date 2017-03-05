@@ -20,6 +20,7 @@ RUN set -x \
         cyrus-sasl \
         icu \
         openssl \
+        sudo \
         tini \
     && apk add --no-cache --virtual build-dependencies \
         build-base \
@@ -47,7 +48,6 @@ RUN set -x \
 
 COPY docker-entrypoint.sh /
 
-USER znc
 VOLUME /znc-data
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
