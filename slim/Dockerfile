@@ -19,7 +19,7 @@ RUN set -x \
         ca-certificates \
         cyrus-sasl \
         icu \
-        sudo \
+        su-exec \
         tini \
     && apk add --no-cache --virtual build-dependencies \
         build-base \
