@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -o errexit
+set -o pipefail
+
 # "docker run -ti znc sh" should work, according to
 # https://github.com/docker-library/official-images
 if [ "${1:0:1}" != '-' ]; then
@@ -8,6 +11,15 @@ fi
 
 # Options.
 DATADIR="/znc-data"
+DEFAULTSDIR="/etc/znc-defaults"
+
+# If no existing configuration can be found, populate the data directory with a
+# set of defaults.
+if [ ! -f "$DATADIR/configs/znc.conf" ]; then
+    echo "No existing znc.conf found, copying defaults"
+    cp -ad $DEFAULTSDIR/* $DATADIR
+    /opt/znc/bin/znc --datadir "$DATADIR" --makepem
+fi
 
 # This file is added by znc:full image
 if [ -r /znc-build-modules.sh ]; then
@@ -16,12 +28,7 @@ fi
 
 cd /
 
-# Make sure $DATADIR is owned by znc user. This affects ownership of the
-# mounted directory on the host machine too.
-chown -R znc:znc "$DATADIR" || exit 1
-chmod 700 "$DATADIR" || exit 2
-
 # ZNC itself responds to SIGTERM, and reaps its children, but whatever was
 # started via *shell module is not guaranteed to reap their children.
 # That's why using tini.
-exec /sbin/tini -- su-exec znc:znc /opt/znc/bin/znc --foreground --datadir "$DATADIR" "$@"
+exec /sbin/tini -- /opt/znc/bin/znc --foreground --datadir "$DATADIR" "$@"
