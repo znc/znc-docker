@@ -47,6 +47,13 @@ RUN set -x \
 
 COPY docker-entrypoint.sh /
 
+ADD defaults /etc/znc-defaults
+RUN chmod -R 755 /etc/znc-defaults
+
 VOLUME /znc-data
+
+EXPOSE 8080
+
+USER znc
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
