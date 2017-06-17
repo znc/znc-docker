@@ -8,4 +8,5 @@ RUN set -x \
         libressl-dev \
         perl \
         python3
-COPY znc-build-modules.sh /
+
+COPY 30-build-modules.sh /startup-sequence/
