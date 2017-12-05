@@ -21,6 +21,7 @@ RUN set -x \
         icu \
         su-exec \
         tini \
+        tzdata \
     && apk add --no-cache --virtual build-dependencies \
         build-base \
         curl \
