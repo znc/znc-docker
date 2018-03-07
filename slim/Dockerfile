@@ -32,8 +32,8 @@ RUN set -x \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
-    && curl -fsSL "http://people.znc.in/~darthgandalf/znc/1.6.6/znc-1.6.6.tar.gz" -o znc.tgz \
-    && curl -fsSL "http://people.znc.in/~darthgandalf/znc/1.6.6/znc-1.6.6.tar.gz.sig" -o znc.tgz.sig \
+    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
+    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "${GPG_KEY}" \
     && gpg --batch --verify znc.tgz.sig znc.tgz \
