@@ -7,15 +7,16 @@ ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 
 # musl silently doesn't support AI_ADDRCONFIG yet, and ZNC doesn't support Happy Eyeballs yet.
 # Together they cause very slow connection. So for now IPv6 is disabled here.
-ARG CONFIGUREFLAGS="--prefix=/opt/znc --enable-cyrus --enable-perl --enable-python --disable-ipv6"
+ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES -DWANT_IPV6=NO"
 ARG MAKEFLAGS=""
 
-ENV ZNC_VERSION 1.6.6
+ENV ZNC_VERSION 1.7.0
 
 RUN set -x \
     && adduser -S znc \
     && addgroup -S znc \
     && apk add --no-cache --virtual runtime-dependencies \
+        boost \
         ca-certificates \
         cyrus-sasl \
         icu \
@@ -23,9 +24,12 @@ RUN set -x \
         tini \
         tzdata \
     && apk add --no-cache --virtual build-dependencies \
+        boost-dev \
         build-base \
+        cmake \
         curl \
         cyrus-sasl-dev \
+        gettext \
         gnupg \
         icu-dev \
         libressl-dev \
@@ -40,7 +44,7 @@ RUN set -x \
     && rm -rf "$GNUPGHOME" \
     && tar -zxf znc.tgz --strip-components=1 \
     && mkdir build && cd build \
-    && ../configure ${CONFIGUREFLAGS} \
+    && cmake .. ${CMAKEFLAGS} \
     && make $MAKEFLAGS \
     && make install \
     && apk del build-dependencies \

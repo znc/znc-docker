@@ -4,6 +4,7 @@ FROM znc:slim
 RUN set -x \
     && apk add --no-cache \
         build-base \
+        cmake \
         icu-dev \
         libressl-dev \
         perl \
