@@ -53,7 +53,7 @@ RUN set -x \
 COPY entrypoint.sh /
 COPY 00-try-sh.sh /startup-sequence/
 COPY 01-options.sh /startup-sequence/
-COPY 50-chown.sh /startup-sequence/
+COPY 20-chown.sh /startup-sequence/
 COPY 99-launch.sh /startup-sequence/
 
 VOLUME /znc-data
