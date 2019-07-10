@@ -6,8 +6,8 @@ ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 # :full image installs perl and python3 again, making these modules loadable.
 
 # musl silently doesn't support AI_ADDRCONFIG yet, and ZNC doesn't support Happy Eyeballs yet.
-# Together they cause very slow connection. So for now IPv6 is disabled here.
-ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES -DWANT_IPV6=NO"
+# Together they cause very slow connection. So just don't add both IPs to the dns record...
+ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES -DWANT_IPV6=YES"
 ARG MAKEFLAGS=""
 
 ENV ZNC_VERSION 1.7.4
