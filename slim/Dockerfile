@@ -18,6 +18,7 @@ RUN set -x \
         ca-certificates \
         cyrus-sasl \
         icu \
+        libressl \
         su-exec \
         tini \
         tzdata \
