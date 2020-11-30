@@ -50,10 +50,7 @@ RUN set -x \
     && cd / && rm -rf /znc-src
 
 COPY entrypoint.sh /
-COPY 00-try-sh.sh /startup-sequence/
-COPY 01-options.sh /startup-sequence/
-COPY 20-chown.sh /startup-sequence/
-COPY 99-launch.sh /startup-sequence/
+COPY startup-sequence /startup-sequence/
 
 VOLUME /znc-data
 
