@@ -18,7 +18,7 @@ RUN set -x \
         ca-certificates \
         cyrus-sasl \
         icu \
-        libressl \
+        openssl \
         su-exec \
         tini \
         tzdata \
@@ -31,7 +31,7 @@ RUN set -x \
         gettext \
         gnupg \
         icu-dev \
-        libressl-dev \
+        openssl-dev \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
