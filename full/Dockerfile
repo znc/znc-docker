@@ -6,7 +6,7 @@ RUN set -x \
         build-base \
         cmake \
         icu-dev \
-        libressl-dev \
+        openssl-dev \
         perl \
         python3
 
