@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.17
 
 ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 
@@ -18,6 +18,7 @@ RUN set -x \
         ca-certificates \
         cyrus-sasl \
         icu \
+        icu-data-full \
         openssl \
         su-exec \
         tini \
