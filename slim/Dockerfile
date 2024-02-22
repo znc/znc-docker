@@ -1,19 +1,20 @@
-FROM alpine:3.18
+FROM alpine:3.19
 
 ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 
 # modperl and modpython are built, but won't be loadable.
 # :full image installs perl and python3 again, making these modules loadable.
 
-ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES"
+ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES -DWANT_ARGON=YES"
 ARG MAKEFLAGS=""
 
-ENV ZNC_VERSION 1.8.2
+ENV ZNC_VERSION 1.9.0
 
 RUN set -x \
     && adduser -S znc \
     && addgroup -S znc \
     && apk add --no-cache --virtual runtime-dependencies \
+        argon2-libs \
         boost \
         ca-certificates \
         cyrus-sasl \
@@ -24,6 +25,7 @@ RUN set -x \
         tini \
         tzdata \
     && apk add --no-cache --virtual build-dependencies \
+        argon2-dev \
         boost-dev \
         build-base \
         cmake \
