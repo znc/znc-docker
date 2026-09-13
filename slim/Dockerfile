@@ -8,7 +8,7 @@ ENV GPG_KEY D5823CACB477191CAC0075555AE420CC0209989E
 ARG CMAKEFLAGS="-DCMAKE_INSTALL_PREFIX=/opt/znc -DWANT_CYRUS=YES -DWANT_PERL=YES -DWANT_PYTHON=YES -DWANT_ARGON=YES"
 ARG MAKEFLAGS=""
 
-ENV ZNC_VERSION 1.10.2
+ENV ZNC_VERSION 1.10.3
 
 RUN set -x \
     && adduser -S znc \
@@ -38,8 +38,8 @@ RUN set -x \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
-    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
-    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
+    && curl -fsSL "https://files.asokolov.org/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
+    && curl -fsSL "https://files.asokolov.org/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${GPG_KEY}" \
     && gpg --batch --verify znc.tgz.sig znc.tgz \
