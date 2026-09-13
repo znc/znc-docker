@@ -38,8 +38,8 @@ RUN set -x \
         perl-dev \
         python3-dev \
     && mkdir /znc-src && cd /znc-src \
-    && curl -fsSL "https://files.asokolov.org/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
-    && curl -fsSL "https://files.asokolov.org/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
+    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz" -o znc.tgz \
+    && curl -fsSL "https://znc.in/releases/archive/znc-${ZNC_VERSION}.tar.gz.sig" -o znc.tgz.sig \
     && export GNUPGHOME="$(mktemp -d)" \
     && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${GPG_KEY}" \
     && gpg --batch --verify znc.tgz.sig znc.tgz \
